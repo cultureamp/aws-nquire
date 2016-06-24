@@ -7,11 +7,11 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"strings"
 
-	"cultureamp/aws-nquire/logging"
+	"github.com/cultureamp/aws-nquire/logging"
 )
 
-func Run(prefix string) {
-	svc := ec2.New(session.New(&aws.Config{Region: aws.String("us-west-2")}))
+func Run(prefix string, region string) {
+	svc := ec2.New(session.New(&aws.Config{Region: aws.String(region)}))
 	rsp := queryByAccount(svc, prefix)
 	amis := Filter(rsp.Images, func(i *ec2.Image) bool {
 		return strings.Contains(*i.Name, prefix)

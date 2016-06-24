@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	ami "github.com/cultureamp/aws-nquire/command/ami"
+	cfn "github.com/cultureamp/aws-nquire/command/cfn"
+	log "github.com/cultureamp/aws-nquire/logging"
 	"os"
-
-	amiCmd "cultureamp/aws-nquire/command/ami"
 )
 
 func main() {
@@ -13,19 +13,23 @@ func main() {
 	stack := flag.String("stack", "", "specify stack name to search")
 	flag.Parse()
 
+	//hard code region for now
+	region := "us-west-2"
+
 	if len(os.Args) < 2 {
 		flag.Usage()
 		os.Exit(1)
 	}
 
 	if len(*prefix) > 0 {
-		fmt.Printf("prefix = %s\n", *prefix)
-		amiCmd.Run(*prefix)
+		log.Debug("ami-prefix=" + *prefix)
+		ami.Run(*prefix, region)
 	}
+
+	args := flag.Args()
 
 	if len(*stack) > 0 {
-		fmt.Println("stack = %s\n", *stack)
+		log.Debug("stack=" + *stack)
+		cfn.Run(*stack, args[0], region)
 	}
-
-	fmt.Printf("other args: %+v\n", flag.Args())
 }

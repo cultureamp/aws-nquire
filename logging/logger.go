@@ -1,7 +1,6 @@
 package logging
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -10,17 +9,20 @@ import (
 var (
 	debug *log.Logger
 	info  *log.Logger
+	err   *log.Logger
 )
 
 func init() {
-	fmt.Println("init being called")
-
 	debug = log.New(os.Stdout,
 		"DEBUG: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 
 	info = log.New(os.Stdout,
 		"INFO: ",
+		log.Ldate|log.Ltime|log.Lshortfile)
+
+	err = log.New(os.Stdout,
+		"ERROR: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 }
 
@@ -33,4 +35,8 @@ func Debug(m string) {
 
 func Info(m string) {
 	info.Println(m)
+}
+
+func Error(m string) {
+	err.Println(m)
 }
