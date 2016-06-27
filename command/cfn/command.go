@@ -1,28 +1,30 @@
 package command
 
 import (
-	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	cfn "github.com/aws/aws-sdk-go/service/cloudformation"
-	log "github.com/cultureamp/aws-nquire/logging"
 	"os"
 	"strings"
+
+	cfn "github.com/aws/aws-sdk-go/service/cloudformation"
+	log "github.com/cultureamp/aws-nquire/logging"
 )
 
-func Run(stack string, key string, region string) {
+func Run(stack string, key string, region string) string {
 	svc := cfn.New(session.New(&aws.Config{Region: aws.String(region)}))
 	resp := queryStackOutputs(svc, stack)
 	outputs := getOutputs(resp.Stacks)
-	findByKey(key, outputs)
+	return findByKey(key, outputs)
 }
 
-func findByKey(k string, outputs []*cfn.Output) {
+func findByKey(k string, outputs []*cfn.Output) string {
+	var id string
 	for _, output := range outputs {
 		if strings.EqualFold(*output.OutputKey, k) {
-			fmt.Println(*output.OutputValue)
+			id = *output.OutputValue
 		}
 	}
+	return id
 }
 
 func queryStackOutputs(svc *cfn.CloudFormation, stack string) *cfn.DescribeStacksOutput {
