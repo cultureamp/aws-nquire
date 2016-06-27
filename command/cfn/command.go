@@ -24,7 +24,14 @@ func findByKey(k string, outputs []*cfn.Output) string {
 			id = *output.OutputValue
 		}
 	}
-	return id
+
+	if len(id) == 0 {
+		log.Error("Unable to find value from stack outputs")
+		os.Exit(1)
+	} else {
+		return id
+	}
+	return ""
 }
 
 func queryStackOutputs(svc *cfn.CloudFormation, stack string) *cfn.DescribeStacksOutput {
@@ -32,7 +39,7 @@ func queryStackOutputs(svc *cfn.CloudFormation, stack string) *cfn.DescribeStack
 	resp, err := svc.DescribeStacks(inputs)
 	if err != nil {
 		log.Error("Error in describing stacks")
-		panic(err)
+		os.Exit(1)
 	}
 
 	return resp

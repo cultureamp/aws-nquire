@@ -39,8 +39,8 @@ func queryByAccount(svc *ec2.EC2, prefix string) *ec2.DescribeImagesOutput {
 	inputs := params()
 	resp, err := svc.DescribeImages(inputs)
 	if err != nil {
-		log.Info("Error in describing images")
-		panic(err)
+		log.Error("Error in describing images")
+		os.Exit(1)
 	}
 	return resp
 }
@@ -67,7 +67,7 @@ func latest(imgs []*ec2.Image) (string, string) {
 	name := *imgs[0].Name
 	id := *imgs[0].ImageId
 	for _, img := range imgs {
-		if strings.Compare(name, *img.Name) < 1 {
+		if strings.Compare(name, *img.Name) < 0 {
 			name = *img.Name
 			id = *img.ImageId
 		}
