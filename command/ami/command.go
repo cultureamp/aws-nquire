@@ -10,7 +10,7 @@ import (
 	log "github.com/cultureamp/aws-nquire/logging"
 )
 
-func Run(prefix string, region string) string {
+func Run(prefix string, field string, region string) string {
 	svc := ec2.New(session.New(&aws.Config{Region: aws.String(region)}))
 	rsp := queryByAccount(svc, prefix)
 	amis := filter(rsp.Images, func(i *ec2.Image) bool {
@@ -20,7 +20,19 @@ func Run(prefix string, region string) string {
 		log.Error("Unable to find ami by prefix: " + prefix)
 		os.Exit(1)
 	}
-	return latest(amis)
+	id, name := latest(amis)
+	fieldInLower := strings.ToLower(field)
+
+	switch fieldInLower {
+	case "name":
+		return name
+	case "imageid":
+		return id
+	default:
+		log.Error("Invalid argument (expected: ImageId or Name), found: " + field)
+		os.Exit(1)
+	}
+	return ""
 }
 
 func queryByAccount(svc *ec2.EC2, prefix string) *ec2.DescribeImagesOutput {
@@ -51,7 +63,7 @@ func filter(imgs []*ec2.Image, f func(*ec2.Image) bool) []*ec2.Image {
 	return amis
 }
 
-func latest(imgs []*ec2.Image) string {
+func latest(imgs []*ec2.Image) (string, string) {
 	name := *imgs[0].Name
 	id := *imgs[0].ImageId
 	for _, img := range imgs {
@@ -60,5 +72,5 @@ func latest(imgs []*ec2.Image) string {
 			id = *img.ImageId
 		}
 	}
-	return id
+	return id, name
 }

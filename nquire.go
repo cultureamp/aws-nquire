@@ -18,24 +18,32 @@ func main() {
 	//hard code region for now
 	region := "us-west-2"
 
-	//	if len(os.Args) < 2 {
-	//		flag.Usage()
-	//		os.Exit(1)
-	//	}
+	//check remainging args
+	args := flag.Args()
+	check_args(args)
+	jsonKey := args[0]
 
 	var id string
 
 	if len(*prefix) > 0 {
 		log.Debug("ami-prefix=" + *prefix)
-		id = ami.Run(*prefix, region)
+		log.Debug("jsonKey=" + jsonKey)
+		id = ami.Run(*prefix, jsonKey, region)
 	} else if len(*stack) > 0 {
-		args := flag.Args()
 		log.Debug("stack=" + *stack)
-		id = cfn.Run(*stack, args[0], region)
+		id = cfn.Run(*stack, jsonKey, region)
 	} else {
 		flag.Usage()
 		os.Exit(1)
 	}
 
 	fmt.Println(id)
+}
+
+func check_args(args []string) {
+	if len(args) == 0 {
+		log.Info("Insufficient arguments")
+		flag.Usage()
+		os.Exit(1)
+	}
 }
