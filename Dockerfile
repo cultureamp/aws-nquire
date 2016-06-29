@@ -8,4 +8,4 @@ RUN go build github.com/cultureamp/aws-nquire
 
 RUN cp ./aws-nquire /usr/local/bin
 
-CMD aws-nquire
+ENTRYPOINT ["/usr/local/bin/aws-nquire"]
