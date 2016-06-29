@@ -14,3 +14,6 @@ aws-nquire -stack $STACK_NAME VpcId
 
 To download and build:
 go get github.com/cultureamp/aws-nquire
+
+
+Copyright © 2016 Culture Amp Pty Ltd, all rights reserved.
