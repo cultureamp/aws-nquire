@@ -1,4 +1,5 @@
 FROM golang:1.7
+MAINTAINER Cultureamp IS Team <is_team@cultureamp.com>
 
 COPY . /go/src/github.com/cultureamp/aws-nquire
 
