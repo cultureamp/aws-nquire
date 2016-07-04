@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -13,6 +14,10 @@ import (
 func Run(prefix string, field string, region string) string {
 	svc := ec2.New(session.New(&aws.Config{Region: aws.String(region)}))
 	rsp := queryByAccount(svc, prefix)
+	for _, v := range rsp.Images {
+		filterByBranchTag(v, "branch", "setup-ami-baking-on-ci")
+	}
+
 	amis := filter(rsp.Images, func(i *ec2.Image) bool {
 		return strings.Contains(*i.Name, prefix)
 	})
@@ -35,8 +40,18 @@ func Run(prefix string, field string, region string) string {
 	return ""
 }
 
+func filterByBranchTag(i *ec2.Image, key string, value string) bool {
+	for _, tag := range i.Tags {
+		if strings.EqualFold(*tag.Key, key) && strings.EqualFold(*tag.Value, value) {
+			fmt.Println("found one " + *i.Name)
+			return true
+		}
+	}
+	return false
+}
+
 func queryByAccount(svc *ec2.EC2, prefix string) *ec2.DescribeImagesOutput {
-	inputs := params()
+	inputs := params2(prefix)
 	resp, err := svc.DescribeImages(inputs)
 	if err != nil {
 		log.Error("Error in describing images")
@@ -49,6 +64,25 @@ func params() *ec2.DescribeImagesInput {
 	return &ec2.DescribeImagesInput{
 		Owners: []*string{
 			aws.String("self"),
+		},
+	}
+}
+
+func params2(prefix string) *ec2.DescribeImagesInput {
+	nameRegex := prefix + "*"
+	return &ec2.DescribeImagesInput{
+		Owners: []*string{
+			aws.String("self"),
+		},
+		Filters: []*ec2.Filter{
+			&ec2.Filter{
+				Name:   aws.String("tag-key"),
+				Values: []*string{aws.String("Name")},
+			},
+			&ec2.Filter{
+				Name:   aws.String("tag-value"),
+				Values: []*string{aws.String(nameRegex)},
+			},
 		},
 	}
 }
