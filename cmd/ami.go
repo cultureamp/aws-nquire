@@ -25,10 +25,7 @@ var amiCmd = &cobra.Command{
 			region = "us-west-2"
 		}
 		log.Debug("command 'ami' called")
-		log.Debug("prefix: " + prefix)
-		log.Debug("git branch: " + branch)
-		log.Debug("# of arguments: " + strconv.Itoa(len(args)))
-		log.Debug("arg[0]: " + args[0])
+		logInputs(args)
 		id := ami.Run(prefix, args[0], region, "branch", branch)
 		fmt.Println(id)
 	},
@@ -43,6 +40,13 @@ var (
 func init() {
 	RootCmd.AddCommand(amiCmd)
 	amiCmd.PersistentFlags().StringVar(&prefix, "prefix", "", "name of ami")
-	amiCmd.PersistentFlags().StringVar(&branch, "branch", "", "git branch from which ami was baked")
+	amiCmd.PersistentFlags().StringVar(&branch, "branch", "master", "git branch from which ami was baked")
 	amiCmd.PersistentFlags().StringVar(&region, "aws region", "", "aws region")
+}
+
+func logInputs(args []string) {
+	log.Debug("prefix: " + prefix)
+	log.Debug("git branch: " + branch)
+	log.Debug("# of arguments: " + strconv.Itoa(len(args)))
+	log.Debug("arg[0]: " + args[0])
 }
