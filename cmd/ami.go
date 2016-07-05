@@ -11,6 +11,11 @@ import (
 	log "github.com/cultureamp/aws-nquire/logging"
 )
 
+var (
+	prefix string
+	branch string
+)
+
 // amiCmd represents the ami command
 var amiCmd = &cobra.Command{
 	Use:   "ami",
@@ -30,12 +35,6 @@ var amiCmd = &cobra.Command{
 		fmt.Println(id)
 	},
 }
-
-var (
-	prefix string
-	branch string
-	region string
-)
 
 func init() {
 	RootCmd.AddCommand(amiCmd)
