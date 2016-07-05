@@ -29,7 +29,7 @@ var amiCmd = &cobra.Command{
 		log.Debug("git branch: " + branch)
 		log.Debug("# of arguments: " + strconv.Itoa(len(args)))
 		log.Debug("arg[0]: " + args[0])
-		id := ami.Run(prefix, args[0], region)
+		id := ami.Run(prefix, args[0], region, "branch", branch)
 		fmt.Println(id)
 	},
 }
