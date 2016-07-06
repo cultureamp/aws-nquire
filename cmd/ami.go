@@ -19,8 +19,8 @@ var (
 // amiCmd represents the ami command
 var amiCmd = &cobra.Command{
 	Use:   "ami",
-	Short: "find ami by tags",
-	Long:  `A longer description`,
+	Short: "find ami",
+	Long:  `find the latest (baked) ami by tag "key=value"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(prefix) == 0 {
 			log.Error("Can not search ami without prefix. Prefix is mandatory")
