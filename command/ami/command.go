@@ -16,7 +16,7 @@ func Run(prefix string, field string, region string, key string, value string) s
 	images := filter(rsp.Images, key, value)
 
 	validateResult(images)
-	id, name := latest(images)
+	id, name := getLatest(images)
 	fieldInLower := strings.ToLower(field)
 
 	switch fieldInLower {
@@ -86,7 +86,7 @@ func params(prefix string) *ec2.DescribeImagesInput {
 	}
 }
 
-func latest(imgs []*ec2.Image) (string, string) {
+func getLatest(imgs []*ec2.Image) (string, string) {
 	name := *imgs[0].Name
 	id := *imgs[0].ImageId
 	for _, img := range imgs {
