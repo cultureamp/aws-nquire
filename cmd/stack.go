@@ -37,5 +37,5 @@ var stackCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(stackCmd)
 	stackCmd.PersistentFlags().StringVar(&stackName, "name", "", "name of a stack")
-	stackCmd.PersistentFlags().StringVar(&region, "aws region", "", "aws region")
+	stackCmd.PersistentFlags().StringVar(&region, "region", "", "aws region")
 }

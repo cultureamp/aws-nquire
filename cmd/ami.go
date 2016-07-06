@@ -40,7 +40,7 @@ func init() {
 	RootCmd.AddCommand(amiCmd)
 	amiCmd.PersistentFlags().StringVar(&prefix, "prefix", "", "name of ami")
 	amiCmd.PersistentFlags().StringVar(&branch, "branch", "master", "git branch from which ami was baked")
-	amiCmd.PersistentFlags().StringVar(&region, "aws region", "", "aws region")
+	amiCmd.PersistentFlags().StringVar(&region, "region", "", "aws region")
 }
 
 func logInputs(args []string) {
