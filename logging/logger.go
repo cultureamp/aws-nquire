@@ -27,7 +27,7 @@ func init() {
 }
 
 func Debug(m string) {
-	debugFlag := os.Getenv("NQUIRE_DEBUG")
+	debugFlag := os.Getenv("AWS_NQUIRE_DEBUG")
 	if strings.EqualFold(debugFlag, "true") {
 		debug.Println(m)
 	}

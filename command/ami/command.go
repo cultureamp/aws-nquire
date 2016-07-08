@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -48,6 +49,7 @@ func filterByBranchTag(i *ec2.Image, key string, value string) bool {
 }
 
 func filter(imgs []*ec2.Image, key string, value string) []*ec2.Image {
+	log.Debug(fmt.Sprintf("filter images by tag %s=%s", key, value))
 	var amis []*ec2.Image
 	for _, img := range imgs {
 		if filterByBranchTag(img, key, value) {
