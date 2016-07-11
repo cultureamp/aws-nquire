@@ -56,7 +56,6 @@ func validateResult(images []*ec2.Image) {
 func matchByTag(i *ec2.Image, key string, value string) bool {
 	for _, tag := range i.Tags {
 		if strings.EqualFold(*tag.Key, key) && matchByRegex(value, *tag.Value) {
-			dump(i)
 			return true
 		}
 	}
