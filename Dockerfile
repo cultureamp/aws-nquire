@@ -8,6 +8,8 @@ RUN go get -v github.com/spf13/cobra/cobra
 
 RUN go build github.com/cultureamp/aws-nquire
 
+RUN go test github.com/cultureamp/aws-nquire/...
+
 RUN cp ./aws-nquire /usr/local/bin
 
 ENTRYPOINT ["/usr/local/bin/aws-nquire"]

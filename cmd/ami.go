@@ -12,8 +12,9 @@ import (
 )
 
 var (
-	prefix string
-	branch string
+	prefix  string
+	branch  string
+	account string
 )
 
 // amiCmd represents the ami command
@@ -31,7 +32,7 @@ var amiCmd = &cobra.Command{
 		}
 		log.Debug("command 'ami' called")
 		logInputs(args)
-		id := ami.Run(prefix, args[0], region, "branch", branch)
+		id := ami.Run(prefix, args[0], region, account, "branch", branch)
 		fmt.Println(id)
 	},
 }
@@ -41,6 +42,7 @@ func init() {
 	amiCmd.PersistentFlags().StringVar(&prefix, "prefix", "", "name of ami")
 	amiCmd.PersistentFlags().StringVar(&branch, "branch", "master", "git branch from which ami was baked")
 	amiCmd.PersistentFlags().StringVar(&region, "region", "", "aws region")
+	amiCmd.PersistentFlags().StringVar(&account, "account", "", "aws account id")
 }
 
 func logInputs(args []string) {
