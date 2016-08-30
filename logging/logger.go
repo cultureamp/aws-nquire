@@ -13,15 +13,15 @@ var (
 )
 
 func init() {
-	debug = log.New(os.Stdout,
+	debug = log.New(os.Stderr,
 		"DEBUG: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 
-	info = log.New(os.Stdout,
+	info = log.New(os.Stderr,
 		"INFO: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 
-	err = log.New(os.Stdout,
+	err = log.New(os.Stderr,
 		"ERROR: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 }
